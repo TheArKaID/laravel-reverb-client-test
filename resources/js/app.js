@@ -4,7 +4,7 @@ import './stisla/scripts';
 import './stisla/custom';
 
 import '../css/app.css';
-import '../scss/app.scss'
+import '../sass/app.scss'
 
 import '../css/stisla/style.css';
 import '../css/stisla/components.css';

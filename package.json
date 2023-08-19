@@ -4,8 +4,11 @@
         "dev": "vite",
         "build": "vite build"
     },
-    "dependencies": {
+    "type": "module",
+    "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.7.2",
+        "@popperjs/core": "^2.11.6",
+        "axios": "^1.1.2",
         "bootstrap": "^4.2.1",
         "bootstrap-colorpicker": "^3.0.3",
         "bootstrap-daterangepicker": "^3.0.3",
@@ -30,12 +33,16 @@
         "jquery-ui-dist": "^1.12.1",
         "jquery.nicescroll": "^3.7.6",
         "jqvmap": "github:10bestdesign/jqvmap",
+        "laravel-vite-plugin": "^0.8.0",
+        "lodash": "^4.17.19",
         "moment": "^2.24.0",
         "nicescroll": "^3.7.4",
         "owl.carousel": "^2.3.4",
         "perfect-scrollbar": "^1.4.0",
         "popper.js": "^1.14.7",
+        "postcss": "^8.1.14",
         "prismjs": "^1.15.0",
+        "sass": "^1.56.1",
         "select2": "^4.0.6-rc.1",
         "selectric": "^1.13.0",
         "simpleweather": "^3.1.0",
@@ -43,16 +50,7 @@
         "summernote": "^0.8.11",
         "sweetalert": "^2.1.2",
         "tooltip.js": "^1.3.1",
+        "vite": "^4.4.9",
         "weathericons": "^2.1.0"
-    },
-    "devDependencies": {
-        "axios": "^0.25",
-        "laravel-mix": "^6.0.49",
-        "laravel-vite-plugin": "^0.8.0",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14",
-        "sass": "^1.66.1",
-        "vite": "^4.4.9"
-    },
-    "type": "module"
+    }
 }
