@@ -22,6 +22,33 @@
                             <div class="card-body">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
+                                        <label for="host">Host</label>
+                                        <input type="text" id="host" class="form-control" placeholder="Host" value="locahost">
+                                        <small>When you run this app from https, then the wss would (looks like) to run on wss, http to ws</small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="port">Port</label>
+                                        <input type="text" id="port" class="form-control" placeholder="Port" value="443">
+                                        <small>If you set the port to 80 and 443, it is mean no port</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="key">Key</label>
+                                        <input type="text" id="key" class="form-control" placeholder="Key">
+                                        <small>Key is your client key which to connect</small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="provider">Provider</label>
+                                        <select name="provider" class="form-control" id="provider">
+                                            <option value="reverb" selected>Reverb</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
                                         <label for="channel">Channel Name</label>
                                         <input type="text" id="channel" class="form-control" placeholder="Channel Name">
                                     </div>
@@ -29,15 +56,15 @@
                                         <label for="event">Event Name</label>
                                         <input type="text" id="event" class="form-control" placeholder="Event Name">
                                     </div>
-                                    <button class="btn btn-primary" onclick="listen()">Listen</button>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" onclick="listen()">Listen</button>
+                                        <small>Hit the button will refresh the page with parameter, since Laravel Echo would connect immediately the page opened</small>
+                                    </div>
                                 </div>
-                            {{-- <div class="card-footer">
-                                <textarea class="form-control" id="data" rows="6" style="height: unset" hidden></textarea>
-                            </div> --}}
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="card">
                             <div class="card-body">
@@ -55,15 +82,20 @@
 
 @push('scripts')
     <script>
+        var host = document.getElementById('host');
+        var port = document.getElementById('port');
+        var key = document.getElementById('key');
+        var provider = document.getElementById('provider');
+
         var channelName = ''
         var eventName = ''
         var data = ''
 
         window.echoConfig = {
-            broadcaster: 'reverb',
-            key: 'grosphere-dev',
-            host: 'dev.grosphere.sg',
-            port: 443,
+            broadcaster: provider.value,
+            key: key.value,
+            host: host.value,
+            port: port.value,
             forceTLS: false
         };
 
