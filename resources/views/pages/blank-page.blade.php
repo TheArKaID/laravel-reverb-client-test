@@ -7,7 +7,7 @@
 @endpush
 
 @section('main')
-    <div class="main-content">
+    <div class="main-content" style="padding-right: 280px">
         <section class="section">
             <div class="section-header" style="display: inherit;">
                 <h1>Pusher Compatible Tester</h1>

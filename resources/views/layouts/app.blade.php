@@ -15,9 +15,6 @@
     <div id="app">
         <div class="main-wrapper">
             @include('components.header')
-
-            @include('components.sidebar')
-
             @yield('main')
 
             @include('components.footer')
