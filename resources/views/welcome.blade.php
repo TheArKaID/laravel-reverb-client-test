@@ -89,27 +89,21 @@
 <body class="layout-3">
     <div id="app">
         <div class="main-wrapper container">
+            <span class="support-palestine" href="#" rel="nofollow noopener" title="Donate to support palestine">
+                <div class="support-palestine__flag" role="img" aria-label="Flag of palestine">
+                    <div class="background">
+                        <div class="top"></div>
+                        <div class="middle"></div>
+                        <div class="triangle"></div>
+                    </div>
+                </div>
+                <div class="support-palestine__label">#StandWithPalestine</div>
+            </span>
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-secondary navbar-expand-lg">
-                <div class="container">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <span class="support-palestine" href="#" rel="nofollow noopener" title="Donate to support palestine">
-                                <div class="support-palestine__flag" role="img" aria-label="Flag of palestine">
-                                    <div class="background">
-                                        <div class="top"></div>
-                                        <div class="middle"></div>
-                                        <div class="triangle"></div>
-                                    </div>
-                                </div>
-                                <div class="support-palestine__label">#StandWithPalestine</div>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
             </nav>
 
-            <div class="main-content">
+            <div class="main-content" style="padding-top: 120px;">
                 <section class="section">
                     <div class="section-header" style="display: inherit;">
                         <h1>Pusher Compatible Tester</h1>
@@ -139,7 +133,7 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
                                                     <label for="key">Key</label>
-                                                    <input type="text" name="ket" id="key" class="form-control" placeholder="Key" value="{{ request('key', '') }}">
+                                                    <input type="text" name="key" id="key" class="form-control" placeholder="Key" value="{{ request('key', '') }}">
                                                     <small>Key is your client key which to connect</small>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -149,7 +143,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Connect</button>
+                                                    <button type="submit" class="btn btn-primary" disabled>Connect</button>
                                                     <br>
                                                     <small>*Submitting will refresh the page with parameter, since Laravel Echo would connect immediately after the page opened</small>
                                                 </div>
@@ -166,7 +160,7 @@
                                                 <input type="text" id="event" class="form-control" placeholder="Event Name">
                                             </div>
                                             <div class="form-group">
-                                                <button class="btn btn-primary" onclick="listen()">Listen</button>
+                                                <button class="btn btn-primary" onclick="listen()" disabled>Listen</button>
                                             </div>
                                         </div>
                                     </div>
@@ -177,6 +171,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-row">
+                                            <label for="data">Responses</label><br>
                                             <textarea class="form-control" id="data" rows="6" style="height: unset" hidden></textarea>
                                         </div>
                                     </div>
@@ -203,11 +198,7 @@
         var port = document.getElementById('port');
         var key = document.getElementById('key');
         var provider = document.getElementById('provider');
-
-        var channelName = ''
-        var eventName = ''
-        var data = ''
-
+        tryWebsocketConnection()
         window.echoConfig = {
             broadcaster: provider.value,
             key: key.value,
@@ -215,13 +206,17 @@
             port: port.value,
             forceTLS: false
         };
-
-        textarea = document.getElementById('data');
         var editor
-        function listen() {
-            channelName = document.getElementById('channel');
-            eventName = document.getElementById('event');
-            textarea.hidden = false;
+
+        // Ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initPusherListener()
+
+            var channelName = ''
+            var eventName = ''
+            var data = ''
+
+            textarea = document.getElementById('data');
             editor = window.CodeMirror.fromTextArea(textarea, {
                 lineNumbers: true,
                 mode: 'javascript',
@@ -230,13 +225,17 @@
                 readOnly: true,
                 scrollbarStyle: 'null',
             });
+        });
+
+        function listen() {
+            channelName = document.getElementById('channel');
+            eventName = document.getElementById('event');
+            textarea.hidden = false;
 
             var channel = Echo.channel(channelName.value);
             console.log(channelName.value, eventName.value)
             channel.listen(eventName.value, (data) => {
-                // append and new line
-                data = editor.getValue() + '\n' + JSON.stringify(data, null, 2);
-                editor.setValue(data);
+                appendToEditor(data)
             });
             channel.listenToAll((event, data) => {
                 // do what you need to do based on the event name and data
@@ -244,9 +243,53 @@
             });
         }
 
-        // On websocket connected
-        function onConnected() {
-            console.log('Connected to websocket');
+        function initPusherListener() {
+            const pusher = window.Echo.connector.pusher
+
+            // Listen for the 'connected' event
+            pusher.connection.bind('connected', function(res) {
+                res.status = 'connected'
+                appendToEditor(res)
+            });
+            
+            // Listen for the 'disconnected' event
+            pusher.connection.bind('disconnected', () => {
+                res.status = 'disconnected'
+                appendToEditor(res)
+            });
+
+            // Listen for the 'error' event
+            pusher.connection.bind('error', (err) => {
+                appendToEditor(err)
+            });
+        }
+
+        function appendToEditor(params) {
+            editor.setValue(editor.getValue() + '\n' + JSON.stringify(params, null, 2));
+        }
+
+        function tryWebsocketConnection() {
+            try {
+                const isHttps = window.location.protocol === 'https:'
+                const ws = new WebSocket(isHttps ? 'wss' : 'ws' + '://' + host.value + ':' + port.value + '/app/' + key.value)
+
+                ws.onopen = function() {
+                    ws.close()
+                }
+                ws.onerror = function(err) {
+                    appendToEditor({
+                        status: 'error',
+                        message: 'Connection failed, please check your connection or the server is down.'
+                    })
+                    ws.close()
+                }
+            } catch (error) {
+                appendToEditor({
+                    status: 'error',
+                    message: 'Connection failed, please check your connection or the server is down.'
+                })
+                ws.close()
+            }
         }
     </script>
 </body>
