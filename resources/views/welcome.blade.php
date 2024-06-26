@@ -143,7 +143,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary" disabled>Connect</button>
+                                                    <button type="submit" id="connect-btn" class="btn btn-primary" disabled>Connect</button>
                                                     <br>
                                                     <small>*Submitting will refresh the page with parameter, since Laravel Echo would connect immediately after the page opened</small>
                                                 </div>
@@ -160,7 +160,7 @@
                                                 <input type="text" id="event" class="form-control" placeholder="Event Name">
                                             </div>
                                             <div class="form-group">
-                                                <button class="btn btn-primary" onclick="listen()" disabled>Listen</button>
+                                                <button class="btn btn-primary" id="listen-btn" onclick="listen()" disabled>Listen</button>
                                             </div>
                                         </div>
                                     </div>
@@ -233,8 +233,8 @@
             textarea.hidden = false;
 
             var channel = Echo.channel(channelName.value);
-            console.log(channelName.value, eventName.value)
-            channel.listen(eventName.value, (data) => {
+
+            channel.listen('pusher:pong', (data) => {
                 appendToEditor(data)
             });
             channel.listenToAll((event, data) => {
@@ -259,7 +259,7 @@
             });
 
             // Listen for the 'error' event
-            pusher.connection.bind('error', (err) => {
+            pusher.connection.bind('error', (err) => {                
                 appendToEditor(err)
             });
         }
@@ -274,6 +274,8 @@
                 const ws = new WebSocket(isHttps ? 'wss' : 'ws' + '://' + host.value + ':' + port.value + '/app/' + key.value)
 
                 ws.onopen = function() {
+                    document.getElementById('connect-btn').disabled = false
+                    document.getElementById('listen-btn').disabled = false
                     ws.close()
                 }
                 ws.onerror = function(err) {
