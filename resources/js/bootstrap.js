@@ -74,20 +74,3 @@ window.Echo = new Echo({
     forceTLS: window.echoConfig.forceTLS,
     enabledTransports: ['ws', 'wss'],
 });
-// Access the Pusher instance
-const pusher = window.Echo.connector.pusher;
-
-// Listen for the 'connected' event
-pusher.connection.bind('connected', () => {
-    console.log('WebSocket connected');
-});
-
-// Listen for the 'disconnected' event
-pusher.connection.bind('disconnected', () => {
-    console.log('WebSocket disconnected');
-});
-
-// Listen for the 'error' event
-pusher.connection.bind('error', (err) => {
-    console.error('WebSocket error:', err);
-});
