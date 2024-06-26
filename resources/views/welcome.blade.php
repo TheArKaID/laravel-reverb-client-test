@@ -122,36 +122,39 @@
                             <div class="col-12 col-md-6 col-lg-6">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="host">Host</label>
-                                                <input type="text" id="host" class="form-control" placeholder="Host" value="{{ request('host', 'localhost') }}">
-                                                <small>When you run this app from https, then the wss would (looks like) to run on wss, http to ws</small>
+                                        <form>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="host">Host</label>
+                                                    <input type="text" name ="host" id="host" class="form-control" placeholder="Host" value="{{ request('host', 'localhost') }}">
+                                                    <small>When you run this app from https, then the wss would (looks like) to run on wss, http to ws</small>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="port">Port</label>
+                                                    <input type="text" name ="port" id="port" class="form-control" placeholder="Port" value="{{ request('port', 443) }}">
+                                                    <small>If you set the port to 80 and 443, it is mean no port</small>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="port">Port</label>
-                                                <input type="text" id="port" class="form-control" placeholder="Port" value="{{ request('port', 443) }}">
-                                                <small>If you set the port to 80 and 443, it is mean no port</small>
+                                            
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="key">Key</label>
+                                                    <input type="text" name="ket" id="key" class="form-control" placeholder="Key" value="{{ request('key', '') }}">
+                                                    <small>Key is your client key which to connect</small>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="provider">Provider</label>
+                                                    <select name="provider" class="form-control" id="provider">
+                                                        <option value="reverb" selected>Reverb</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary">Connect</button>
+                                                    <br>
+                                                    <small>*Submitting will refresh the page with parameter, since Laravel Echo would connect immediately after the page opened</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="key">Key</label>
-                                                <input type="text" id="key" class="form-control" placeholder="Key" value="{{ request('key', '') }}">
-                                                <small>Key is your client key which to connect</small>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="provider">Provider</label>
-                                                <select name="provider" class="form-control" id="provider">
-                                                    <option value="reverb" selected>Reverb</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-primary" onclick="listen()">Connect</button>
-                                                <small>Hit the button will refresh the page with parameter, since Laravel Echo would connect immediately the page opened</small>
-                                            </div>
-                                        </div>
+                                        </form>
         
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
