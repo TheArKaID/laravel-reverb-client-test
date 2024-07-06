@@ -213,7 +213,7 @@
                     alert(JSON.stringify(res.data.message))
                 })
                 .catch(err => {
-                    alert(JSON.stringify(err))
+                    alert(JSON.stringify(err.message))
                 })
                 .finally(() => {
                     document.getElementById('trigger-event').disabled = false
@@ -284,9 +284,11 @@
             });
             
             // Listen for the 'disconnected' event
-            pusher.connection.bind('disconnected', () => {
-                res.status = 'disconnected'
-                appendToEditor(res)
+            pusher.connection.bind('disconnected', (res) => {
+                appendToEditor({
+                    status: 'disconnected',
+                    message: 'Connection disconnected, please check your connection or the server is down.'
+                })
             });
 
             // Listen for the 'error' event
