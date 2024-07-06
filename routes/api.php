@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\NewMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('trigger', function (Request $request) {
+    NewMessage::dispatch($request->message);
+
+    return response()->json([
+        'message' => 'Event triggered'
+    ]);
 });
