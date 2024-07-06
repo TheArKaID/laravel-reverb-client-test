@@ -113,6 +113,21 @@
         
                     <div class="section-body">
                         <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="message">Message</label>
+                                                <input type="text" name ="message" id="message" class="form-control" placeholder="New Message">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" id="trigger-event" class="btn btn-primary" onclick="sendTriggerMessage()">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-12 col-md-6 col-lg-6">
                                 <div class="card">
                                     <div class="card-body">
@@ -190,6 +205,23 @@
     </div>
     
     <script>
+        sendTriggerMessage = () => {
+            document.getElementById('trigger-event').disabled = true
+            const message = document.getElementById('message').value
+            axios.post('/api/trigger', { message })
+                .then(res => {
+                    alert(JSON.stringify(res.data.message))
+                })
+                .catch(err => {
+                    alert(JSON.stringify(err))
+                })
+                .finally(() => {
+                    document.getElementById('trigger-event').disabled = false
+                })
+        }
+    </script>
+
+    <script>
         var host = document.getElementById('host');
         var port = document.getElementById('port');
         var key = document.getElementById('key');
@@ -237,6 +269,9 @@
                 // do what you need to do based on the event name and data
                 console.log(event, data)
             });
+            channel.listen(eventName.value, (data) => {
+                appendToEditor(data)
+            });
         }
 
         function initPusherListener() {
@@ -270,8 +305,6 @@
                 const ws = new WebSocket(isHttps ? 'wss' : 'ws' + '://' + host.value + ':' + port.value + '/app/' + key.value)
 
                 ws.onopen = function() {
-                    document.getElementById('connect-btn').disabled = false
-                    document.getElementById('listen-btn').disabled = false
                     ws.close()
                 }
                 ws.onerror = function(err) {
@@ -287,6 +320,9 @@
                     message: 'Connection failed, please check your connection or the server is down.'
                 })
                 ws.close()
+            } finally {
+                document.getElementById('connect-btn').disabled = false
+                document.getElementById('listen-btn').disabled = false
             }
         }
     </script>
