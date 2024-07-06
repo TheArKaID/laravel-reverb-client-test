@@ -241,6 +241,9 @@
                 // do what you need to do based on the event name and data
                 console.log(event, data)
             });
+            channel.listen(eventName.value, (data) => {
+                appendToEditor(data)
+            });
         }
 
         function initPusherListener() {
