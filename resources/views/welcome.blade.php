@@ -108,7 +108,7 @@
                     <div class="section-header" style="display: inherit;">
                         <h1>Pusher Compatible Tester</h1>
                         <br>
-                        <small>Designed for Laravel Websocket Testing</small>
+                        <small>Designed for Laravel Reverb Testing</small>
                     </div>
         
                     <div class="section-body">
@@ -183,11 +183,7 @@
             </div>
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauv.al/">Muhamad Nauval
-                        Azhar</a>
-                </div>
-                <div class="footer-right">
-                    2.3.0
+                    Stisla Admin Template Implementation - <a href="https://github.com/TheArKaID/laravel-stisla-boilerplate">Laravel Stisla</a>
                 </div>
             </footer>
         </div>
