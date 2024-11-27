@@ -9,9 +9,9 @@
 
 <section class="section">
     <div class="section-header" style="display: inherit;">
-        <h1>Pusher Compatible Tester</h1>
+        <h1>SignalR Tester</h1>
         <br>
-        <small>Designed for Laravel Reverb Testing</small>
+        <small>You might wanna open 2 pages with the same Connection to see the Websocket result</small>
         <a href="" class="btn btn-primary" style="float: right">Pusher</a>
     </div>
 
@@ -20,6 +20,9 @@
             <div class="col-12">
                 <div class="card">
                     <form action="" method="get">
+                        <div class="card-header">
+                            <h4>Connection</h4>
+                        </div>
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="url">URL</label>
@@ -41,12 +44,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Message</h4>
-                        <small>You might wanna open 2 pages with the same Connection to see the Websocket result</small>
                     </div>
                     <div class="card-body">
                         <small></small>
                         <div id="messages"></div>
-                        <input type="text" id="messageInput" />
+                        <input type="text" class="form-control" id="messageInput" />
                         <button class="btn btn-primary" onclick="sendMessage()">Send</button>
                     </div>
                 </div>
