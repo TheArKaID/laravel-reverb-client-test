@@ -116,9 +116,7 @@
                 document.getElementById('trigger-event').disabled = false
             })
     }
-</script>
 
-<script>
     var host = document.getElementById('host');
     var port = document.getElementById('port');
     var key = document.getElementById('key');
