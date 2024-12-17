@@ -73,16 +73,17 @@
     // Get token from query string
     var token = new URLSearchParams(window.location.search).get("token");
     var url = new URLSearchParams(window.location.search).get("url");
-    console.log(token, url)
+    var data = parseJwt(token);
+console.log(data);
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl((url + '/ws') ?? 'https://localhost:44336/ws', {
+        .withUrl((url) ?? 'https://localhost:44336/ws', {
             accessTokenFactory: () => token,
             transport: signalR.HttpTransportType.WebSockets
         })
         .configureLogging(signalR.LogLevel.Debug)
         .build();
 
-    connection.on("ReceiveMessage", (user, message) => {
+    connection.on("Notifications", (user, message) => {
         document.getElementById("messages").innerHTML += `<p><strong>${user}</strong>: ${message}</p>`;
     });
 
@@ -93,11 +94,27 @@
     });
 
     function sendMessage() {
-        const user = "User"; // Get user from input
+        const user = "User";
         const message = document.getElementById("messageInput").value;
-        console.log(connection)
+
         connection.invoke("SendMessage", user, message);
     }
+    
+    function joinGroup() {
+        connection.invoke("JoinGroup", data.Role);
+    }
+
+    function parseJwt(jwt) {
+        return JSON.parse(
+            decodeURIComponent(
+                Array.prototype.map.call(
+                    atob(jwt.split('.')[1].replace('-', '+').replace('_', '/')),
+                    (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                ).join('')
+            )
+        );
+    }
+
 </script>
 
 @endpush
