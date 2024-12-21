@@ -47,7 +47,12 @@
                     </div>
                     <div class="card-body">
                         <small></small>
-                        <div id="messages"></div>
+                        
+                        <div class="form-row">
+                            <label for="data">Responses</label><br>
+                            <textarea class="form-control" id="data" rows="6" style="height: unset" hidden></textarea>
+                        </div>
+
                         <input type="text" class="form-control" id="messageInput" />
                         <button class="btn btn-primary" onclick="sendMessage()">Send</button>
                     </div>
@@ -74,7 +79,8 @@
     var token = new URLSearchParams(window.location.search).get("token");
     var url = new URLSearchParams(window.location.search).get("url");
     var data = parseJwt(token);
-console.log(data);
+
+    console.log(data);
     const connection = new signalR.HubConnectionBuilder()
         .withUrl((url) ?? 'https://localhost:44336/ws', {
             accessTokenFactory: () => token,
@@ -83,8 +89,8 @@ console.log(data);
         .configureLogging(signalR.LogLevel.Debug)
         .build();
 
-    connection.on("Notifications", (user, message) => {
-        document.getElementById("messages").innerHTML += `<p><strong>${user}</strong>: ${message}</p>`;
+    connection.on("Notifications", (data) => {
+        appendToEditor(JSON.parse(data));
     });
 
     connection.start().then(() => {
@@ -115,6 +121,23 @@ console.log(data);
         );
     }
 
+    var editor
+
+    document.addEventListener('DOMContentLoaded', function() {
+        textarea = document.getElementById('data');
+        editor = window.CodeMirror.fromTextArea(textarea, {
+            lineNumbers: true,
+            mode: 'javascript',
+            json: true,
+            theme: 'duotone-dark',
+            readOnly: true,
+            scrollbarStyle: 'null',
+        });
+    });
+    
+    function appendToEditor(params) {
+        editor.setValue(editor.getValue() + '\n' + JSON.stringify(params, null, 2));
+    }
 </script>
 
 @endpush
